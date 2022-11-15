@@ -22,45 +22,66 @@ namespace SequenceDiagram {
     /* ==================== Inductive Elements ==================== */
 
     abstract class Inductive : IElement {
+	protected List<IElement> subcomponents;
 	abstract public string render();
     }
     
-    abstract class Block: Inductive {
+    abstract class BlockSimple : Inductive {
+	public BlockSimple add(IElement element) {
+	    this.subcomponents.Add(element);
+	    return this;
+	}
 	override abstract public string render();
     }
 	
-    class Alternative : Inductive {
+    class Optional : BlockSimple {
 	override public string render() {return "hihi";}
     }
 
-    class Optional : Inductive {
-	override public string render() {return "hihi";}
-    }
-
-    class Parallel : Inductive {
-	override public string render() {return "hihi";}
-    }
-
-    class Loop : Block {
-	private List<IElement> subcomponents;
-
+    class Loop : BlockSimple {
 	public Loop() {
 	    this.subcomponents = new List<IElement> {};
 	}
 
-	public Loop add(IElement element) {
-	    this.subcomponents.Add(element);
-	    return this;
+	override public string render() {return "hihi";}
+    }
+
+    class Highlight : BlockSimple {
+	public Highlight() {
+	    this.subcomponents = new List<IElement> {};
 	}
 
 	override public string render() {return "hihi";}
     }
-    
+
+
+    abstract class BlockConditional: Inductive {
+	public BlockConditional cond(IElement element) {
+	    this.subcomponents.Add(element);
+	    return this;
+	}
+
+	override abstract public string render();
+    }
+
+    class Alternative : BlockConditional {
+	override public string render() {return "hihi";}
+    }
+
+    class Parallel : BlockConditional {
+	override public string render() {return "hihi";}
+    }
+
     class SequenceDiagram : IElement {
 	public SequenceDiagram add(IElement element) { return new SequenceDiagram(); }
+
 	public string render() { return "Hihi"; }
     }
 }
+
+// for increased challenge, let's not use any sort of StringBuilder in .render(),
+// but define it recursively where a render is a combination of
+// the renders of its lower-elements.
 
 // short sketch:
 // SequenceDiagram sd = sequenceDiagram()
