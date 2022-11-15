@@ -1,35 +1,75 @@
 namespace SequenceDiagram {
     interface IElement {
-	public void add(IElement element)
+	public string render();
     }
     
-    abstract class Arrow : IElement {
-	
+    /* ==================== Base Elements ==================== */
+
+    abstract class Base : IElement {
+	abstract public string render();
     }
 
-    class SolidArrow : Arrow, IElement {
-	
+    // ============ Arrow ============
+
+    abstract class Arrow : Base {
+	override abstract public string render();
     }
 
-    class Loop {
+    class SolidArrow : Arrow {
+	override public string render() {return "hihi";}
+    }
+
+    /* ==================== Inductive Elements ==================== */
+
+    abstract class Inductive : IElement {
+	abstract public string render();
+    }
+    
+    abstract class Block: Inductive {
+	override abstract public string render();
+    }
 	
+    class Alternative : Inductive {
+	override public string render() {return "hihi";}
+    }
+
+    class Optional : Inductive {
+	override public string render() {return "hihi";}
+    }
+
+    class Parallel : Inductive {
+	override public string render() {return "hihi";}
+    }
+
+    class Loop : Block {
+	private List<IElement> subcomponents;
+
+	public Loop() {
+	    this.subcomponents = new List<IElement> {};
+	}
+
+	public Loop add(IElement element) {
+	    this.subcomponents.Add(element);
+	    return this;
+	}
+
+	override public string render() {return "hihi";}
     }
     
     class SequenceDiagram : IElement {
-	public string render() {
-	    return "Hihi";
-	}
+	public SequenceDiagram add(IElement element) { return new SequenceDiagram(); }
+	public string render() { return "Hihi"; }
     }
-
 }
 
+// short sketch:
 // SequenceDiagram sd = sequenceDiagram()
 // 	        	.add(loop("until dead")
-// 			     .add(solidArrow("alice", "bob", "hihi"))
+// 			     .add(solidArrow("alice", "bob", "hihi"))  // solidArrow should enable config by taking named & optional args
 // 			     .add(solidArrow("bob", "alice", "hoho"))
 // 			     .add(optional("hoho")
 // 				     .add(solidArrow("alice", "bob", "hihi"))
-// 				     .add(alternative("x = 1", solidArrow("alice", "bob", "hihi"))  // alternative takes variadic arguments
+// 				     .add(alternative("x = 1", solidArrow("alice", "bob", "hihi"))  // alternative should take variadic args
 // 				                .cond("x = 2", solidArrow("bob", "join", "hihi"))
 // 			   		        .cond("x = 3", solidArrow("john", "alice", "hihi"))))
 // 	                     .add(parallel("alice to bob", solidArrow("alice", "bob", "hihi"))
