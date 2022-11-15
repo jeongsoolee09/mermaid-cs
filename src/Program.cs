@@ -1,2 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using SequenceDiagram;
+
+// See https://aka.ms/new-console-template for more information
 Console.WriteLine("Hello, World!");
