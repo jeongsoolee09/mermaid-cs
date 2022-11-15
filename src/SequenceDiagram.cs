@@ -12,22 +12,108 @@ namespace SequenceDiagram {
     // ============ Arrow ============
 
     abstract class Arrow : Base {
+	protected string from, to, message;
+	protected bool activate, deactivate;
+	protected Arrow(string from, string to, string message,
+			bool activate = false, bool deactivate = false) {
+	    (this.from, this.to, this.message, this.activate, this.deactivate) =
+		(from, to, message, activate, deactivate);
+	}
 	override abstract public string render();
     }
 
-    class SolidArrow : Arrow {
+    abstract class Solid : Arrow {
+	protected Solid(string from, string to, string message,
+			bool activate = false, bool deactivate = false)
+	    : base(from, to, message, activate, deactivate) {}
+    }
+
+    class SolidLine : Solid {
+	private SolidLine(string from, string to, string message,
+			  bool activate = false, bool deactivate = false)
+	    : base(from, to, message, activate, deactivate) {}
+
+	override public string render() {return "TODO";}
+    }
+
+    class SolidArrow : Solid {
+	private SolidArrow(string from, string to, string message,
+			   bool activate = false, bool deactivate = false) 
+	    : base(from, to, message, activate, deactivate) {}
+
+	override public string render() {return "TODO";}
+    }
+
+    class SolidCross : Solid {
+	private SolidCross(string from, string to, string message,
+			   bool activate = false, bool deactivate = false)
+	    : base(from, to, message, activate, deactivate) {}
+
+	override public string render() {return "TODO";}
+    }
+
+    class SolidOpen : Solid {
+	private SolidOpen(string from, string to, string message,
+			  bool activate = false, bool deactivate = false)
+	    : base(from, to, message, activate, deactivate) {}
+
+	override public string render() {return "TODO";}
+    }
+
+    abstract class Dotted : Arrow {
+	protected Dotted(string from, string to, string message,
+			 bool activate = false, bool deactivate = false)
+	    : base(from, to, message, activate, deactivate) {}
+    }
+
+    class DottedLine : Dotted {
+	private DottedLine(string from, string to, string message,
+			   bool activate = false, bool deactivate = false)
+
+	    : base(from, to, message, activate, deactivate) {}
+
+	override public string render() {return "TODO";}
+    }
+
+    class DottedArrow : Dotted {
+	private DottedArrow(string from, string to, string message,
+			    bool activate = false, bool deactivate = false)
+	    : base(from, to, message, activate, deactivate) {}
+
+	override public string render() {return "TODO";}
+    }
+
+    class DottedCross : Dotted {
+	private DottedCross(string from, string to, string message,
+			    bool activate = false, bool deactivate = false)
+	    : base(from, to, message, activate, deactivate) {}
+
+	override public string render() {return "TODO";}
+    }
+
+    class DottedOpen : Dotted {
+	private DottedOpen(string from, string to, string message,
+			   bool activate = false, bool deactivate = false)
+	    : base(from, to, message, activate, deactivate) {}
+
 	override public string render() {return "TODO";}
     }
 
     /* ==================== Inductive Elements ==================== */
 
     abstract class Inductive : IElement {
-	protected List<IElement> subcomponents;
+	protected string detail;
+	protected List<object> subcomponents;
+	protected Inductive(string detail) {
+	    this.detail = detail;
+	}
 	abstract public string render();
     }
     
     abstract class BlockSimple : Inductive {
-	public BlockSimple add(IElement element) {
+	protected List<IElement> subcomponents;
+	protected BlockSimple(string detail) : base(detail) {}
+	public Inductive add(IElement element) {
 	    this.subcomponents.Add(element);
 	    return this;
 	}
@@ -35,58 +121,48 @@ namespace SequenceDiagram {
     }
 	
     class Optional : BlockSimple {
+	private Optional(string detail) : base(detail) {}
 	override public string render() {return "TODO";}
     }
 
     class Loop : BlockSimple {
-	public Loop() {
-	    this.subcomponents = new List<IElement> {};
-	}
-
+	private Loop(string detail) : base(detail) {}
 	override public string render() {return "TODO";}
     }
 
     class Highlight : BlockSimple {
-	public Highlight() {
-	    this.subcomponents = new List<IElement> {};
-	}
-
+	private Highlight(string detail) : base(detail) {}
 	override public string render() {return "TODO";}
     }
 
 
     abstract class BlockConditional: Inductive {
-	public BlockConditional cond(IElement element) {
-	    this.subcomponents.Add(element);
+	protected List<(string, IElement)> subcomponents;
+	protected BlockConditional(string condition, params IElement[] subcomponents) : base(condition) {
+	    this.subcomponents = new List<(string, IElement)>();
+	    foreach (IElement subcomponent in subcomponents) {
+		this.subcomponents.Add((condition, subcomponent));
+	    }
+	}
+	public BlockConditional cond(string condition, IElement element) {
+	    this.subcomponents.Add((condition, element));
 	    return this;
 	}
 
 	override abstract public string render();
     }
 
+
     class Alternative : BlockConditional {
 	private string condition;
-	public Alternative(string condition, params IElement[] subcomponents) {
-	    this.condition = condition;
-	    this.subcomponents = new List<IElement>();
-	    foreach (IElement subcomponent in subcomponents) {
-		this.subcomponents.Add(subcomponent);
-	    }
-	}
+	private Alternative(string condition, params IElement[] subcomponents) : base(condition, subcomponents) {}
 
 	override public string render() {return "TODO";}
     }
 
     class Parallel : BlockConditional {
 	private string condition;
-
-	public Parallel(string condition, params IElement[] subcomponents) {
-	    this.condition = condition;
-	    this.subcomponents = new List<IElement>();
-	    foreach (IElement subcomponent in subcomponents) {
-		this.subcomponents.Add(subcomponent);
-	    }
-	}
+	private Parallel(string condition, params IElement[] subcomponents) : base(condition, subcomponents) {}
 	
 	override public string render() {return "TODO";}
     }
