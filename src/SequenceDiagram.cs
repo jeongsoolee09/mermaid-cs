@@ -103,7 +103,7 @@ namespace SequenceDiagram {
 
     abstract class Inductive : IElement {
 	protected string detail;
-	protected List<object> subcomponents;
+	// protected List<object> subcomponents;
 	protected Inductive(string detail) {
 	    this.detail = detail;
 	}
@@ -112,7 +112,9 @@ namespace SequenceDiagram {
     
     abstract class BlockSimple : Inductive {
 	protected List<IElement> subcomponents;
-	protected BlockSimple(string detail) : base(detail) {}
+	protected BlockSimple(string detail) : base(detail) {
+	    this.subcomponents = new List<IElement>();
+	}
 	public Inductive add(IElement element) {
 	    this.subcomponents.Add(element);
 	    return this;
@@ -154,28 +156,25 @@ namespace SequenceDiagram {
 
 
     class Alternative : BlockConditional {
-	private string condition;
 	private Alternative(string condition, params IElement[] subcomponents) : base(condition, subcomponents) {}
 
 	override public string render() {return "TODO";}
     }
 
     class Parallel : BlockConditional {
-	private string condition;
 	private Parallel(string condition, params IElement[] subcomponents) : base(condition, subcomponents) {}
 	
 	override public string render() {return "TODO";}
     }
 
-    class SequenceDiagram : IElement {
-	private SequenceDiagram() {}
-	public SequenceDiagram add(IElement element) { return new SequenceDiagram(); }
+    class SequenceDiagram : BlockSimple {
+	private SequenceDiagram() : base("") {}
 
 	public static SequenceDiagram sequenceDiagram() {
 	    return new SequenceDiagram();
 	}
 
-	public string render() { return "TODO"; }
+	override public string render() { return "TODO"; }
     }
 
 }
