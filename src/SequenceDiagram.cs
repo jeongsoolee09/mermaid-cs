@@ -84,7 +84,14 @@ namespace SequenceDiagram {
 			  bool activate = false, bool deactivate = false)
 	    : base(from, to, message, activate, deactivate) {}
 
-	override public string render() {return "TODO";}
+	override public string render() =>
+	    (this.activate, this.deactivate) switch {
+	    (false, false) => $"{this.from}->{this.to}: {this.message}",
+	    (true, false)  => $"{this.from}->+{this.to}: {this.message}",
+	    (false, true)  => $"{this.from}->-{this.to}: {this.message}",
+	    (true, true)   => throw new ArgumentException("Cannot be both activate and deactivate receiver at the same time")
+	};
+
     }
 
     class SolidArrow : Solid {
@@ -92,7 +99,14 @@ namespace SequenceDiagram {
 			   bool activate = false, bool deactivate = false) 
 	    : base(from, to, message, activate, deactivate) {}
 
-	override public string render() {return "TODO";}
+	override public string render() =>
+	    (this.activate, this.deactivate) switch {
+	    (false, false) => $"{this.from}->>{this.to}: {this.message}",
+	    (true, false)  => $"{this.from}->>+{this.to}: {this.message}",
+	    (false, true)  => $"{this.from}->>-{this.to}: {this.message}",
+	    (true, true)   => throw new ArgumentException("Cannot be both activate and deactivate receiver at the same time")
+	};
+
     }
 
     class SolidCross : Solid {
@@ -100,7 +114,13 @@ namespace SequenceDiagram {
 			   bool activate = false, bool deactivate = false)
 	    : base(from, to, message, activate, deactivate) {}
 
-	override public string render() {return "TODO";}
+	override public string render() =>
+	    (this.activate, this.deactivate) switch {
+	    (false, false) => $"{this.from}-x{this.to}: {this.message}",
+	    (true, false)  => $"{this.from}-x+{this.to}: {this.message}",
+	    (false, true)  => $"{this.from}-x-{this.to}: {this.message}",
+	    (true, true)   => throw new ArgumentException("Cannot be both activate and deactivate receiver at the same time")
+	};
     }
 
     class SolidOpen : Solid {
@@ -108,7 +128,13 @@ namespace SequenceDiagram {
 			  bool activate = false, bool deactivate = false)
 	    : base(from, to, message, activate, deactivate) {}
 
-	override public string render() {return "TODO";}
+	override public string render() =>
+	    (this.activate, this.deactivate) switch {
+	    (false, false) => $"{this.from}-){this.to}: {this.message}",
+	    (true, false)  => $"{this.from}-)+{this.to}: {this.message}",
+	    (false, true)  => $"{this.from}-)-{this.to}: {this.message}",
+	    (true, true)   => throw new ArgumentException("Cannot be both activate and deactivate receiver at the same time")
+	};
     }
 
     abstract class Dotted : Arrow {
@@ -123,7 +149,13 @@ namespace SequenceDiagram {
 
 	    : base(from, to, message, activate, deactivate) {}
 
-	override public string render() {return "TODO";}
+	override public string render() =>
+	    	    (this.activate, this.deactivate) switch {
+	    (false, false) => $"{this.from}-->{this.to}: {this.message}",
+	    (true, false)  => $"{this.from}-->+{this.to}: {this.message}",
+	    (false, true)  => $"{this.from}-->-{this.to}: {this.message}",
+	    (true, true)   => throw new ArgumentException("Cannot be both activate and deactivate receiver at the same time")
+	};
     }
 
     class DottedArrow : Dotted {
@@ -131,7 +163,13 @@ namespace SequenceDiagram {
 			    bool activate = false, bool deactivate = false)
 	    : base(from, to, message, activate, deactivate) {}
 
-	override public string render() {return "TODO";}
+	override public string render() =>
+		    (this.activate, this.deactivate) switch {
+	    (false, false) => $"{this.from}-->>{this.to}: {this.message}",
+	    (true, false)  => $"{this.from}-->>+{this.to}: {this.message}",
+	    (false, true)  => $"{this.from}-->>-{this.to}: {this.message}",
+	    (true, true)   => throw new ArgumentException("Cannot be both activate and deactivate receiver at the same time")
+	};
     }
 
     class DottedCross : Dotted {
@@ -139,7 +177,13 @@ namespace SequenceDiagram {
 			    bool activate = false, bool deactivate = false)
 	    : base(from, to, message, activate, deactivate) {}
 
-	override public string render() {return "TODO";}
+	override public string render() =>
+		    (this.activate, this.deactivate) switch {
+	    (false, false) => $"{this.from}--x{this.to}: {this.message}",
+	    (true, false)  => $"{this.from}--x+{this.to}: {this.message}",
+	    (false, true)  => $"{this.from}--x-{this.to}: {this.message}",
+	    (true, true)   => throw new ArgumentException("Cannot be both activate and deactivate receiver at the same time")
+	};
     }
 
     class DottedOpen : Dotted {
@@ -147,7 +191,13 @@ namespace SequenceDiagram {
 			   bool activate = false, bool deactivate = false)
 	    : base(from, to, message, activate, deactivate) {}
 
-	override public string render() {return "TODO";}
+	override public string render() =>
+		    (this.activate, this.deactivate) switch {
+	    (false, false) => $"{this.from}--){this.to}: {this.message}",
+	    (true, false)  => $"{this.from}--)+{this.to}: {this.message}",
+	    (false, true)  => $"{this.from}--)-{this.to}: {this.message}",
+	    (true, true)   => throw new ArgumentException("Cannot be both activate and deactivate receiver at the same time")
+	};
     }
 
     // ============ Note ============
@@ -225,7 +275,9 @@ namespace SequenceDiagram {
 	
     class Optional : BlockSimple {
 	private Optional(string detail) : base(detail) {}
-	override public string render() {return "TODO";}
+	override public string render() {
+	    return "TODO";
+	}
     }
 
     class Loop : BlockSimple {
