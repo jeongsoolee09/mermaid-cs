@@ -1,3 +1,5 @@
+using System.Text;
+
 namespace SequenceDiagram {
     interface IElement {
 	public string render();
@@ -7,6 +9,55 @@ namespace SequenceDiagram {
 
     abstract class Base : IElement {
 	abstract public string render();
+    }
+
+    // ============ Label ============
+    
+    abstract class Label : Base {
+	override abstract public string render();
+    }
+
+    class Autonumber : Label {
+	override public string render() {
+	    return "autonumber";
+	}
+    }
+
+    class Participants : Label {
+	private List<string> participants;
+	private Participants(List<string> participants) {
+	    this.participants = participants;
+	}
+
+	override public string render() {
+	    StringBuilder acc = new StringBuilder();
+	    acc.Append("participants ");
+	    foreach (string participant in this.participants) {
+		acc.Append(participant);
+		acc.Append(", ");
+	    }
+	    return acc.ToString().Trim(',');
+	}
+    }
+
+    class Activate : Label {
+	private string actor;
+	private Activate(string actor) {
+	    this.actor = actor;
+	}
+	override public string render() {
+	    return "activate " + this.actor;
+	}
+    }
+	
+    class Deactivate : Label {
+	private string actor;
+	private Deactivate(string actor) {
+	    this.actor = actor;
+	}
+	override public string render() {
+	    return "deactivate " + this.actor;
+	}
     }
 
     // ============ Arrow ============
@@ -99,6 +150,56 @@ namespace SequenceDiagram {
 	override public string render() {return "TODO";}
     }
 
+    // ============ Note ============
+
+    abstract class Note : Base {
+	override abstract public string render();
+    }
+
+    class NoteLeft : Note {
+	private string actor, note;
+	private NoteLeft(string actor, string note) {
+	    this.actor = actor;
+	    this.note = note;
+	}
+	
+	override public string render() {
+	    return $"Note left of {this.actor}: {this.note}";
+	}
+    }
+
+    class NoteRight : Note {
+	private string actor, note;
+	private NoteRight(string actor, string note) {
+	    this.actor = actor;
+	    this.note = note;
+	}
+
+	override public string render() {
+	    return $"Note right of {this.actor}: {this.note}";
+	}
+    }
+	
+    class NoteOver : Note {
+	private string actor1, note;
+	private string? actor2;
+
+	private NoteOver(string actor1, string note) {
+	    this.actor1 = actor1;
+	    this.note = note;
+	}
+	
+	private NoteOver(string actor1, string actor2, string note) {
+	    this.actor1 = actor1;
+	    this.actor2 = actor2;
+	    this.note = note;
+	}
+
+	override public string render(){
+	    return this.actor2 == null ? $"Note over {this.actor1}: {this.note}" : $"Note over {this.actor1},{this.actor2}: {this.note}"; 
+	}
+    }
+	
     /* ==================== Inductive Elements ==================== */
 
     abstract class Inductive : IElement {
