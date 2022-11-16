@@ -1,24 +1,18 @@
 using System.Text;
 
 namespace SequenceDiagram {
-    interface IElement {
-	public string render();
-    }
+    interface IElement {}
     
     /* ==================== Base Elements ==================== */
 
-    abstract class Base : IElement {
-	abstract public string render();
-    }
+    abstract class Base : IElement {}
 
     // ============ Label ============
     
-    abstract class Label : Base {
-	override abstract public string render();
-    }
+    abstract class Label : Base {}
 
     class Autonumber : Label {
-	override public string render() {
+	override public string ToString() {
 	    return "autonumber";
 	}
     }
@@ -29,13 +23,11 @@ namespace SequenceDiagram {
 	    this.participants = participants;
 	}
 
-	override public string render() {
+	override public string ToString() {
 	    StringBuilder acc = new StringBuilder();
 	    acc.Append("participants ");
-	    foreach (string participant in this.participants) {
-		acc.Append(participant);
-		acc.Append(", ");
-	    }
+	    foreach (string participant in this.participants)
+		acc.Append($"participant, ");
 	    return acc.ToString().Trim(',');
 	}
     }
@@ -45,8 +37,8 @@ namespace SequenceDiagram {
 	private Activate(string actor) {
 	    this.actor = actor;
 	}
-	override public string render() {
-	    return "activate " + this.actor;
+	override public string ToString() {
+	    return $"activate {this.actor}";
 	}
     }
 	
@@ -55,8 +47,8 @@ namespace SequenceDiagram {
 	private Deactivate(string actor) {
 	    this.actor = actor;
 	}
-	override public string render() {
-	    return "deactivate " + this.actor;
+	override public string ToString() {
+	    return $"deactivate {this.actor}";
 	}
     }
 
@@ -70,7 +62,7 @@ namespace SequenceDiagram {
 	    (this.from, this.to, this.message, this.activate, this.deactivate) =
 		(from, to, message, activate, deactivate);
 	}
-	override abstract public string render();
+	override abstract public string ToString();
     }
 
     abstract class Solid : Arrow {
@@ -84,7 +76,7 @@ namespace SequenceDiagram {
 			  bool activate = false, bool deactivate = false)
 	    : base(from, to, message, activate, deactivate) {}
 
-	override public string render() =>
+	override public string ToString() =>
 	    (this.activate, this.deactivate) switch {
 	    (false, false) => $"{this.from}->{this.to}: {this.message}",
 	    (true, false)  => $"{this.from}->+{this.to}: {this.message}",
@@ -99,7 +91,7 @@ namespace SequenceDiagram {
 			   bool activate = false, bool deactivate = false) 
 	    : base(from, to, message, activate, deactivate) {}
 
-	override public string render() =>
+	override public string ToString() =>
 	    (this.activate, this.deactivate) switch {
 	    (false, false) => $"{this.from}->>{this.to}: {this.message}",
 	    (true, false)  => $"{this.from}->>+{this.to}: {this.message}",
@@ -114,7 +106,7 @@ namespace SequenceDiagram {
 			   bool activate = false, bool deactivate = false)
 	    : base(from, to, message, activate, deactivate) {}
 
-	override public string render() =>
+	override public string ToString() =>
 	    (this.activate, this.deactivate) switch {
 	    (false, false) => $"{this.from}-x{this.to}: {this.message}",
 	    (true, false)  => $"{this.from}-x+{this.to}: {this.message}",
@@ -128,7 +120,7 @@ namespace SequenceDiagram {
 			  bool activate = false, bool deactivate = false)
 	    : base(from, to, message, activate, deactivate) {}
 
-	override public string render() =>
+	override public string ToString() =>
 	    (this.activate, this.deactivate) switch {
 	    (false, false) => $"{this.from}-){this.to}: {this.message}",
 	    (true, false)  => $"{this.from}-)+{this.to}: {this.message}",
@@ -149,8 +141,8 @@ namespace SequenceDiagram {
 
 	    : base(from, to, message, activate, deactivate) {}
 
-	override public string render() =>
-	    	    (this.activate, this.deactivate) switch {
+	override public string ToString() =>
+	    (this.activate, this.deactivate) switch {
 	    (false, false) => $"{this.from}-->{this.to}: {this.message}",
 	    (true, false)  => $"{this.from}-->+{this.to}: {this.message}",
 	    (false, true)  => $"{this.from}-->-{this.to}: {this.message}",
@@ -163,8 +155,8 @@ namespace SequenceDiagram {
 			    bool activate = false, bool deactivate = false)
 	    : base(from, to, message, activate, deactivate) {}
 
-	override public string render() =>
-		    (this.activate, this.deactivate) switch {
+	override public string ToString() =>
+	    (this.activate, this.deactivate) switch {
 	    (false, false) => $"{this.from}-->>{this.to}: {this.message}",
 	    (true, false)  => $"{this.from}-->>+{this.to}: {this.message}",
 	    (false, true)  => $"{this.from}-->>-{this.to}: {this.message}",
@@ -177,8 +169,8 @@ namespace SequenceDiagram {
 			    bool activate = false, bool deactivate = false)
 	    : base(from, to, message, activate, deactivate) {}
 
-	override public string render() =>
-		    (this.activate, this.deactivate) switch {
+	override public string ToString() =>
+	    (this.activate, this.deactivate) switch {
 	    (false, false) => $"{this.from}--x{this.to}: {this.message}",
 	    (true, false)  => $"{this.from}--x+{this.to}: {this.message}",
 	    (false, true)  => $"{this.from}--x-{this.to}: {this.message}",
@@ -191,8 +183,8 @@ namespace SequenceDiagram {
 			   bool activate = false, bool deactivate = false)
 	    : base(from, to, message, activate, deactivate) {}
 
-	override public string render() =>
-		    (this.activate, this.deactivate) switch {
+	override public string ToString() =>
+	    (this.activate, this.deactivate) switch {
 	    (false, false) => $"{this.from}--){this.to}: {this.message}",
 	    (true, false)  => $"{this.from}--)+{this.to}: {this.message}",
 	    (false, true)  => $"{this.from}--)-{this.to}: {this.message}",
@@ -203,7 +195,7 @@ namespace SequenceDiagram {
     // ============ Note ============
 
     abstract class Note : Base {
-	override abstract public string render();
+	override abstract public string ToString();
     }
 
     class NoteLeft : Note {
@@ -213,7 +205,7 @@ namespace SequenceDiagram {
 	    this.note = note;
 	}
 	
-	override public string render() {
+	override public string ToString() {
 	    return $"Note left of {this.actor}: {this.note}";
 	}
     }
@@ -225,7 +217,7 @@ namespace SequenceDiagram {
 	    this.note = note;
 	}
 
-	override public string render() {
+	override public string ToString() {
 	    return $"Note right of {this.actor}: {this.note}";
 	}
     }
@@ -245,7 +237,7 @@ namespace SequenceDiagram {
 	    this.note = note;
 	}
 
-	override public string render(){
+	override public string ToString(){
 	    return this.actor2 == null ? $"Note over {this.actor1}: {this.note}" : $"Note over {this.actor1},{this.actor2}: {this.note}"; 
 	}
     }
@@ -254,87 +246,107 @@ namespace SequenceDiagram {
 
     abstract class Inductive : IElement {
 	protected string detail;
-	// protected List<object> subcomponents;
 	protected Inductive(string detail) {
 	    this.detail = detail;
 	}
-	abstract public string render();
     }
     
     abstract class BlockSimple : Inductive {
 	protected List<IElement> subcomponents;
+	protected string blockPrefix;
+
 	protected BlockSimple(string detail) : base(detail) {
+	    this.blockPrefix = "";
 	    this.subcomponents = new List<IElement>();
 	}
+
 	public Inductive add(IElement element) {
 	    this.subcomponents.Add(element);
 	    return this;
 	}
-	override abstract public string render();
+
+	override public string ToString() {
+	    StringBuilder acc = new StringBuilder();
+	    acc.Append($"{this.blockPrefix} {this.detail}\n");
+	    foreach (IElement subcomponent in this.subcomponents)
+		acc.Append($"    {subcomponent.ToString()}\n");
+	    acc.Append("end");
+	    return acc.ToString();
+	}
     }
 	
     class Optional : BlockSimple {
-	private Optional(string detail) : base(detail) {}
-	override public string render() {
-	    return "TODO";
+	private Optional(string detail) : base(detail) {
+	    this.blockPrefix = "opt"; 
 	}
     }
 
     class Loop : BlockSimple {
-	private Loop(string detail) : base(detail) {}
-	override public string render() {return "TODO";}
+	private Loop(string detail) : base(detail) {
+	    this.blockPrefix = "loop";
+	}
     }
 
     class Highlight : BlockSimple {
-	private Highlight(string detail) : base(detail) {}
-	override public string render() {return "TODO";}
+	private Highlight(string detail) : base(detail) {
+	    this.blockPrefix = "rect";
+	}
     }
 
 
     abstract class BlockConditional: Inductive {
 	protected List<(string, IElement)> subcomponents;
+	protected string blockPrefix;
+	protected string condKeyword;
+
 	protected BlockConditional(string condition, params IElement[] subcomponents) : base(condition) {
+	    this.blockPrefix = "";
+	    this.condKeyword = "";
 	    this.subcomponents = new List<(string, IElement)>();
-	    foreach (IElement subcomponent in subcomponents) {
+	    foreach (IElement subcomponent in subcomponents)
 		this.subcomponents.Add((condition, subcomponent));
-	    }
 	}
+
 	public BlockConditional cond(string condition, IElement element) {
 	    this.subcomponents.Add((condition, element));
 	    return this;
 	}
 
-	override abstract public string render();
+	override public string ToString() {
+	    StringBuilder acc = new StringBuilder();
+	    acc.Append($"{this.blockPrefix} {this.detail}\n");
+	    foreach ((string condition, IElement subcomponent) in this.subcomponents)
+		acc.Append($"    {this.condKeyword} {condition}\n    {subcomponent.ToString()}\n");
+	    acc.Append("end");
+	    return acc.ToString();
+	}
     }
 
 
     class Alternative : BlockConditional {
-	private Alternative(string condition, params IElement[] subcomponents) : base(condition, subcomponents) {}
-
-	override public string render() {return "TODO";}
+	private Alternative(string condition, params IElement[] subcomponents) : base(condition, subcomponents) {
+	    this.blockPrefix = "alt";
+	    this.condKeyword = "else";
+	}
     }
 
     class Parallel : BlockConditional {
-	private Parallel(string condition, params IElement[] subcomponents) : base(condition, subcomponents) {}
-	
-	override public string render() {return "TODO";}
+	private Parallel(string condition, params IElement[] subcomponents) : base(condition, subcomponents) {
+	    this.blockPrefix = "parallel";
+	    this.condKeyword = "and";
+	}
     }
 
     class SequenceDiagram : BlockSimple {
-	private SequenceDiagram() : base("") {}
-
-	public static SequenceDiagram sequenceDiagram() {
-	    return new SequenceDiagram();
+	private SequenceDiagram() : base("") {
+	    this.blockPrefix = "sequenceDiagram";
 	}
-
-	override public string render() { return "TODO"; }
     }
-
 }
 
-// for increased challenge (and ergonomics), let's not use any sort of StringBuilder in .render(),
-// but define it recursively where a render is a combination of
-// the renders of its lower-elements.
+// for increased challenge (and ergonomics), let's not use any sort of StringBuilder in .ToString(),
+// but define it recursively where a ToString is a combination of
+// the ToStrings of its lower-elements.
 
 // short sketch:
 // SequenceDiagram sd = sequenceDiagram()
