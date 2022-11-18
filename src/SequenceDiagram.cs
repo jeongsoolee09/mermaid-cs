@@ -27,7 +27,7 @@ namespace SequenceDiagram {
 	    StringBuilder acc = new StringBuilder();
 	    acc.Append("participants ");
 	    foreach (string participant in this.participants)
-		acc.Append($"participant, ");
+		acc.Append($"{participant}, ");
 	    return acc.ToString().Trim(',');
 	}
     }
