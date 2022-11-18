@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace SequenceDiagram {
+namespace Sequence {
     interface IElement {}
     
     /* ==================== Base Elements ==================== */
@@ -83,7 +83,6 @@ namespace SequenceDiagram {
 	    (false, true)  => $"{this.from}->-{this.to}: {this.message}",
 	    (true, true)   => throw new ArgumentException("Cannot be both activate and deactivate receiver at the same time")
 	};
-
     }
 
     class SolidArrow : Solid {
@@ -98,7 +97,6 @@ namespace SequenceDiagram {
 	    (false, true)  => $"{this.from}->>-{this.to}: {this.message}",
 	    (true, true)   => throw new ArgumentException("Cannot be both activate and deactivate receiver at the same time")
 	};
-
     }
 
     class SolidCross : Solid {
@@ -351,13 +349,13 @@ namespace SequenceDiagram {
 // short sketch:
 // SequenceDiagram sd = sequenceDiagram()
 // 	        	.add(loop("until dead")
-// 			     .add(solidArrow("alice", "bob", "TODO"))  // solidArrow should enable config by taking named & optional args
+// 			     .add(solidArrow("alice", "bob", "hihi"))  // solidArrow should enable config by taking named & optional args
 // 			     .add(solidArrow("bob", "alice", "hoho"))
 // 			     .add(optional("hoho")
-// 				     .add(solidArrow("alice", "bob", "TODO"))
-// 				     .add(alternative("x = 1", solidArrow("alice", "bob", "TODO"))  // alternative should take variadic args
-// 				                .cond("x = 2", solidArrow("bob", "join", "TODO"))
-// 			   		        .cond("x = 3", solidArrow("john", "alice", "TODO"))))
-// 	                     .add(parallel("alice to bob", solidArrow("alice", "bob", "TODO"))
-// 		                     .cond("bob to alice", solidArrow("bob", "alice", "TODO"))))
+// 				     .add(solidArrow("alice", "bob", "hihi"))
+// 				     .add(alternative("x = 1", solidArrow("alice", "bob", "hihi"))  // alternative should take variadic args
+// 				                .cond("x = 2", solidArrow("bob", "join", "hihi"))
+// 			   		        .cond("x = 3", solidArrow("john", "alice", "hihi"))))
+// 	                     .add(parallel("alice to bob", solidArrow("alice", "bob", "hihi"))
+// 		                     .cond("bob to alice", solidArrow("bob", "alice", "hihi"))))
 
