@@ -1,17 +1,25 @@
 ﻿using Sequence;
+using static Sequence.Lang;
+using System;
 
-// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+string alice = "alice";
+string bob   = "bob";
+string john  = "john";
 
+string sayhi = "hihi";
+string sayho = "hoho";
 
-SequenceDiagram sd = sequenceDiagram()
+SequenceDiagram sd = (SequenceDiagram) sequenceDiagram()
 	        	.add(loop("until dead")
-			     .add(solidArrow("alice", "bob", "hihi"))
-			     .add(solidArrow("bob", "alice", "hoho"))
+			     .add(solidArrow(alice, bob, sayhi))
+			     .add(solidArrow(bob, alice, sayho))
 			     .add(optional("hoho")
-				     .add(solidArrow("alice", "bob", "hihi"))
-				     .add(alternative("x = 1", solidArrow("alice", "bob", "hihi"))
-				                .cond("x = 2", solidArrow("bob", "join", "hihi"))
-			   		        .cond("x = 3", solidArrow("john", "alice", "hihi"))))
-	                     .add(parallel("alice to bob", solidArrow("alice", "bob", "hihi"))
-				  .cond("bob to alice", solidArrow("bob", "alice", "hihi"))));
+				     .add(solidArrow(alice, bob, sayhi))
+				     .add(alternative("x = 1", solidArrow(alice, bob, sayhi))
+					        .cond("x = 2", solidArrow(bob, john, sayhi))
+					        .cond("x = 3", solidArrow(john, alice, sayhi))))
+	                     .add(parallel("alice to bob", solidArrow(alice, bob, sayhi))
+				     .cond("bob to alice", solidArrow(bob, alice, sayho))));
+
+
+Console.WriteLine(sd);

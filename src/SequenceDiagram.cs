@@ -1,40 +1,40 @@
 using System.Text;
 
 namespace Sequence {
-    interface IElement {}
+    public interface IElement {}
     
     /* ==================== Base Elements ==================== */
 
-    abstract class Base : IElement {}
+    public abstract class Base : IElement {}
 
     // ============ Label ============
     
-    abstract class Label : Base {}
+    public abstract class Label : Base {}
 
-    class Autonumber : Label {
+    public class Autonumber : Label {
 	override public string ToString() {
 	    return "autonumber";
 	}
     }
 
-    class Participants : Label {
+    public class Participants : Label {
 	private List<string> participants;
-	private Participants(List<string> participants) {
-	    this.participants = participants;
+	public Participants(params string[] participants) {
+	    this.participants = participants.ToList();
 	}
 
 	override public string ToString() {
 	    StringBuilder acc = new StringBuilder();
 	    acc.Append("participants ");
 	    foreach (string participant in this.participants)
-		acc.Append($"participant, ");
+		acc.Append($"{participant}, ");
 	    return acc.ToString().Trim(',');
 	}
     }
 
-    class Activate : Label {
+    public class Activate : Label {
 	private string actor;
-	private Activate(string actor) {
+	public Activate(string actor) {
 	    this.actor = actor;
 	}
 	override public string ToString() {
@@ -42,9 +42,9 @@ namespace Sequence {
 	}
     }
 	
-    class Deactivate : Label {
+    public class Deactivate : Label {
 	private string actor;
-	private Deactivate(string actor) {
+	public Deactivate(string actor) {
 	    this.actor = actor;
 	}
 	override public string ToString() {
@@ -54,10 +54,10 @@ namespace Sequence {
 
     // ============ Arrow ============
 
-    abstract class Arrow : Base {
+    public abstract class Arrow : Base {
 	protected string from, to, message;
 	protected bool activate, deactivate;
-	protected Arrow(string from, string to, string message,
+	public Arrow(string from, string to, string message,
 			bool activate = false, bool deactivate = false) {
 	    (this.from, this.to, this.message, this.activate, this.deactivate) =
 		(from, to, message, activate, deactivate);
@@ -65,14 +65,14 @@ namespace Sequence {
 	override abstract public string ToString();
     }
 
-    abstract class Solid : Arrow {
-	protected Solid(string from, string to, string message,
+    public abstract class Solid : Arrow {
+	public Solid(string from, string to, string message,
 			bool activate = false, bool deactivate = false)
 	    : base(from, to, message, activate, deactivate) {}
     }
 
-    class SolidLine : Solid {
-	private SolidLine(string from, string to, string message,
+    public class SolidLine : Solid {
+	public SolidLine(string from, string to, string message,
 			  bool activate = false, bool deactivate = false)
 	    : base(from, to, message, activate, deactivate) {}
 
@@ -83,10 +83,11 @@ namespace Sequence {
 	    (false, true)  => $"{this.from}->-{this.to}: {this.message}",
 	    (true, true)   => throw new ArgumentException("Cannot be both activate and deactivate receiver at the same time")
 	};
+
     }
 
-    class SolidArrow : Solid {
-	private SolidArrow(string from, string to, string message,
+    public class SolidArrow : Solid {
+	public SolidArrow(string from, string to, string message,
 			   bool activate = false, bool deactivate = false) 
 	    : base(from, to, message, activate, deactivate) {}
 
@@ -97,10 +98,11 @@ namespace Sequence {
 	    (false, true)  => $"{this.from}->>-{this.to}: {this.message}",
 	    (true, true)   => throw new ArgumentException("Cannot be both activate and deactivate receiver at the same time")
 	};
+
     }
 
-    class SolidCross : Solid {
-	private SolidCross(string from, string to, string message,
+    public class SolidCross : Solid {
+	public SolidCross(string from, string to, string message,
 			   bool activate = false, bool deactivate = false)
 	    : base(from, to, message, activate, deactivate) {}
 
@@ -113,8 +115,8 @@ namespace Sequence {
 	};
     }
 
-    class SolidOpen : Solid {
-	private SolidOpen(string from, string to, string message,
+    public class SolidOpen : Solid {
+	public SolidOpen(string from, string to, string message,
 			  bool activate = false, bool deactivate = false)
 	    : base(from, to, message, activate, deactivate) {}
 
@@ -127,14 +129,14 @@ namespace Sequence {
 	};
     }
 
-    abstract class Dotted : Arrow {
-	protected Dotted(string from, string to, string message,
+    public abstract class Dotted : Arrow {
+	public Dotted(string from, string to, string message,
 			 bool activate = false, bool deactivate = false)
 	    : base(from, to, message, activate, deactivate) {}
     }
 
-    class DottedLine : Dotted {
-	private DottedLine(string from, string to, string message,
+    public class DottedLine : Dotted {
+	public DottedLine(string from, string to, string message,
 			   bool activate = false, bool deactivate = false)
 
 	    : base(from, to, message, activate, deactivate) {}
@@ -148,8 +150,8 @@ namespace Sequence {
 	};
     }
 
-    class DottedArrow : Dotted {
-	private DottedArrow(string from, string to, string message,
+    public class DottedArrow : Dotted {
+	public DottedArrow(string from, string to, string message,
 			    bool activate = false, bool deactivate = false)
 	    : base(from, to, message, activate, deactivate) {}
 
@@ -162,8 +164,8 @@ namespace Sequence {
 	};
     }
 
-    class DottedCross : Dotted {
-	private DottedCross(string from, string to, string message,
+    public class DottedCross : Dotted {
+	public DottedCross(string from, string to, string message,
 			    bool activate = false, bool deactivate = false)
 	    : base(from, to, message, activate, deactivate) {}
 
@@ -176,8 +178,8 @@ namespace Sequence {
 	};
     }
 
-    class DottedOpen : Dotted {
-	private DottedOpen(string from, string to, string message,
+    public class DottedOpen : Dotted {
+	public DottedOpen(string from, string to, string message,
 			   bool activate = false, bool deactivate = false)
 	    : base(from, to, message, activate, deactivate) {}
 
@@ -192,13 +194,13 @@ namespace Sequence {
 
     // ============ Note ============
 
-    abstract class Note : Base {
+    public abstract class Note : Base {
 	override abstract public string ToString();
     }
 
-    class NoteLeft : Note {
+    public class NoteLeft : Note {
 	private string actor, note;
-	private NoteLeft(string actor, string note) {
+	public NoteLeft(string actor, string note) {
 	    this.actor = actor;
 	    this.note = note;
 	}
@@ -208,9 +210,9 @@ namespace Sequence {
 	}
     }
 
-    class NoteRight : Note {
+    public class NoteRight : Note {
 	private string actor, note;
-	private NoteRight(string actor, string note) {
+	public NoteRight(string actor, string note) {
 	    this.actor = actor;
 	    this.note = note;
 	}
@@ -220,16 +222,16 @@ namespace Sequence {
 	}
     }
 	
-    class NoteOver : Note {
+    public class NoteOver : Note {
 	private string actor1, note;
 	private string? actor2;
 
-	private NoteOver(string actor1, string note) {
+	public NoteOver(string actor1, string note) {
 	    this.actor1 = actor1;
 	    this.note = note;
 	}
 	
-	private NoteOver(string actor1, string actor2, string note) {
+	public NoteOver(string actor1, string actor2, string note) {
 	    this.actor1 = actor1;
 	    this.actor2 = actor2;
 	    this.note = note;
@@ -242,26 +244,30 @@ namespace Sequence {
 	
     /* ==================== Inductive Elements ==================== */
 
-    abstract class Inductive : IElement {
+    public abstract class Inductive : IElement {
 	protected string detail;
-	protected Inductive(string detail) {
+	public Inductive(string detail) {
 	    this.detail = detail;
 	}
+	public abstract Inductive add(IElement element);
+	public abstract Inductive cond(string condition, IElement element);
     }
     
-    abstract class BlockSimple : Inductive {
+    public abstract class BlockSimple : Inductive {
 	protected List<IElement> subcomponents;
 	protected string blockPrefix;
 
-	protected BlockSimple(string detail) : base(detail) {
+	public BlockSimple(string detail) : base(detail) {
 	    this.blockPrefix = "";
 	    this.subcomponents = new List<IElement>();
 	}
 
-	public Inductive add(IElement element) {
+	override public Inductive add(IElement element) {
 	    this.subcomponents.Add(element);
 	    return this;
 	}
+
+	override public Inductive cond(string condition, IElement element) => throw new ArgumentException($"Cannot call cond on {this.blockPrefix}");
 
 	override public string ToString() {
 	    StringBuilder acc = new StringBuilder();
@@ -273,31 +279,31 @@ namespace Sequence {
 	}
     }
 	
-    class Optional : BlockSimple {
-	private Optional(string detail) : base(detail) {
+    public class Optional : BlockSimple {
+	public Optional(string detail) : base(detail) {
 	    this.blockPrefix = "opt"; 
 	}
     }
 
-    class Loop : BlockSimple {
-	private Loop(string detail) : base(detail) {
+    public class Loop : BlockSimple {
+	public Loop(string detail) : base(detail) {
 	    this.blockPrefix = "loop";
 	}
     }
 
-    class Highlight : BlockSimple {
-	private Highlight(string detail) : base(detail) {
+    public class Highlight : BlockSimple {
+	public Highlight(string color) : base(color) {
 	    this.blockPrefix = "rect";
 	}
     }
 
 
-    abstract class BlockConditional: Inductive {
+    public abstract class BlockConditional: Inductive {
 	protected List<(string, IElement)> subcomponents;
 	protected string blockPrefix;
 	protected string condKeyword;
 
-	protected BlockConditional(string condition, params IElement[] subcomponents) : base(condition) {
+	public BlockConditional(string condition, params IElement[] subcomponents) : base(condition) {
 	    this.blockPrefix = "";
 	    this.condKeyword = "";
 	    this.subcomponents = new List<(string, IElement)>();
@@ -305,7 +311,9 @@ namespace Sequence {
 		this.subcomponents.Add((condition, subcomponent));
 	}
 
-	public BlockConditional cond(string condition, IElement element) {
+	override public Inductive add(IElement element) => throw new ArgumentException($"Cannot call add on {this.blockPrefix}");
+
+	override public Inductive cond(string condition, IElement element) {
 	    this.subcomponents.Add((condition, element));
 	    return this;
 	}
@@ -321,41 +329,66 @@ namespace Sequence {
     }
 
 
-    class Alternative : BlockConditional {
-	private Alternative(string condition, params IElement[] subcomponents) : base(condition, subcomponents) {
+    public class Alternative : BlockConditional {
+	public Alternative(string condition, params IElement[] subcomponents) : base(condition, subcomponents) {
 	    this.blockPrefix = "alt";
 	    this.condKeyword = "else";
 	}
     }
 
-    class Parallel : BlockConditional {
-	private Parallel(string condition, params IElement[] subcomponents) : base(condition, subcomponents) {
+    public class Parallel : BlockConditional {
+	public Parallel(string condition, params IElement[] subcomponents) : base(condition, subcomponents) {
 	    this.blockPrefix = "parallel";
 	    this.condKeyword = "and";
 	}
     }
 
-    class SequenceDiagram : BlockSimple {
-	private SequenceDiagram() : base("") {
+    public class SequenceDiagram : BlockSimple {
+	public SequenceDiagram() : base("") {
 	    this.blockPrefix = "sequenceDiagram";
 	}
     }
+    
+    public static class Lang {
+
+
+	public static Autonumber autonumber() => new Autonumber();
+	public static Participants participants(params string[] participants) => new Participants(participants);
+	public static Activate activate(string actor) => new Activate(actor);
+	public static Deactivate deactivate(string actor) => new Deactivate(actor);
+	public static SolidLine solidLine(string from, string to, string message,
+					    bool activate = false, bool deactivate = false) =>
+	    new SolidLine(from, to, message, activate, deactivate);
+	public static SolidArrow solidArrow(string from, string to, string message,
+					    bool activate = false, bool deactivate = false) =>
+	    new SolidArrow(from, to, message, activate, deactivate);
+	public static SolidCross solidCross(string from, string to, string message,
+					    bool activate = false, bool deactivate = false) =>
+	    new SolidCross(from, to, message, activate, deactivate);
+	public static SolidOpen solidOpen(string from, string to, string message,
+					    bool activate = false, bool deactivate = false) =>
+	    new SolidOpen(from, to, message, activate, deactivate);
+	public static DottedLine dottedLine(string from, string to, string message,
+					    bool activate = false, bool deactivate = false) =>
+	    new DottedLine(from, to, message, activate, deactivate);
+	public static DottedArrow dottedArrow(string from, string to, string message,
+					    bool activate = false, bool deactivate = false) =>
+	    new DottedArrow(from, to, message, activate, deactivate);
+	public static DottedCross dottedCross(string from, string to, string message,
+					    bool activate = false, bool deactivate = false) =>
+	    new DottedCross(from, to, message, activate, deactivate);
+	public static DottedOpen dottedOpen(string from, string to, string message,
+					    bool activate = false, bool deactivate = false) =>
+	    new DottedOpen(from, to, message, activate, deactivate);
+	public static NoteLeft noteLeft(string actor, string note) => new NoteLeft(actor, note);
+	public static NoteRight noteRight(string actor, string note) => new NoteRight(actor, note);
+	public static NoteOver noteOver(string actor1, string note) => new NoteOver(actor1, note);
+	public static NoteOver noteOver(string actor1, string actor2, string note) => new NoteOver(actor1, actor2, note);
+	public static Optional optional(string detail) => new Optional(detail);
+	public static Loop loop(string detail) => new Loop(detail);
+	public static Highlight highlight(string detail) => new Highlight(detail);
+	public static Alternative alternative(string condition, params IElement[] subcomponents) => new Alternative(condition, subcomponents);
+	public static Parallel parallel(string condition, params IElement[] subcomponents) => new Parallel(condition, subcomponents);
+	public static SequenceDiagram sequenceDiagram() => new SequenceDiagram();
+    }
 }
-
-// for increased challenge (and ergonomics), let's not use any sort of StringBuilder in .ToString(),
-// but define it recursively where a ToString is a combination of
-// the ToStrings of its lower-elements.
-
-// short sketch:
-// SequenceDiagram sd = sequenceDiagram()
-// 	        	.add(loop("until dead")
-// 			     .add(solidArrow("alice", "bob", "hihi"))  // solidArrow should enable config by taking named & optional args
-// 			     .add(solidArrow("bob", "alice", "hoho"))
-// 			     .add(optional("hoho")
-// 				     .add(solidArrow("alice", "bob", "hihi"))
-// 				     .add(alternative("x = 1", solidArrow("alice", "bob", "hihi"))  // alternative should take variadic args
-// 				                .cond("x = 2", solidArrow("bob", "join", "hihi"))
-// 			   		        .cond("x = 3", solidArrow("john", "alice", "hihi"))))
-// 	                     .add(parallel("alice to bob", solidArrow("alice", "bob", "hihi"))
-// 		                     .cond("bob to alice", solidArrow("bob", "alice", "hihi"))))
-
